@@ -8,8 +8,8 @@ const dotenv = require("dotenv").config()
 
 
 // Variables
-const dbUri = PROCESS.env.DB_URI
-const dbName = PROCESS.env.DB_NAME
+const dbUri = process.env.DB_URI
+const dbName = process.env.DB_NAME
 
 
 // Connection
