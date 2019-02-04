@@ -28,10 +28,12 @@ app.use(express.static(path.join(__dirname, "public")))
 const index = require("./controllers/index")
 const db = require("./controllers/db/collection")
 const bithumb = require("./controllers/api/bithumb")
+const job = require("./controllers/job/schedule")
 
 app.use("/", index)
 app.use("/db/collection", db)
 app.use("/api/bithumb", bithumb)
+app.use("/job", job)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -52,11 +54,3 @@ app.use((err, req, res, next) => {
 })
 
 module.exports = app
-
-let job = require("./controllers/job/scrapData")
-
-setInterval(
-  () => {
-    job.scrapData("btc")
-  }, 2000
-)

@@ -21,7 +21,7 @@ let getIndexData = (currency) => {return new Promise(
     (resolve) => {
         let uri = localhost + "/db/collection/history-" + currency
         request.get(
-            uri, options({}, {"sort": {"cont_no": -1}, "limit": 1}), (error, response) => {
+            uri, options({}, {"sort": {"_id": -1}, "limit": 1}), (error, response) => {
                 if(error) {
                     console.error(error)
                 } else {
@@ -30,7 +30,7 @@ let getIndexData = (currency) => {return new Promise(
                         resolve(0)
                     } else {
                         //console.log(response.body[0])
-                        resolve(response.body[0].cont_no)
+                        resolve(response.body[0]._id)
                     }
                 }
             }
@@ -71,25 +71,23 @@ let createTransactionData = (currency, index, transactionData) => {return new Pr
             size: data.total
         }
         request.post(uri, options({}, {doc: doc}), async (error, response) => {
-                if(error) {
-                    console.error(error)
-                } else {
-                    console.log(response.body)
-                    if(response.body.code!==11000) {
-                        resolve(response.body)
-                    } else if (response.body.code==11000) {
-                        index = index+1
-                        transactionData = await getTransactionData(currency, index)
-                        createTransactionData(currency, index, transactionData)
-                        resolve(response)
-                    }
+            if(error) {
+                console.error(error)
+            } else {
+                if(response.body.ok==1) {
+                    resolve(response.body)
+                } else if (response.body.code==11000) {
+                    index = index+1
+                    transactionData = await getTransactionData(currency, index)
+                    createTransactionData(currency, index, transactionData)
+                    resolve(response)
                 }
             }
-        )
-    })
-}
+        })
+    }
+)}
 
-let scrapData = async (currency) => {
+let start = async (currency) => {
     let index = await getIndexData(currency)
     let transactionData = await getTransactionData(currency, index)
     createTransactionData(currency, index, transactionData)
@@ -97,4 +95,4 @@ let scrapData = async (currency) => {
 
 exports.getIndexData = getIndexData
 exports.getTransactionData = getTransactionData
-exports.scrapData = scrapData
+exports.start = start
