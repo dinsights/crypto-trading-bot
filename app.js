@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, "public")))
 const index = require("./controllers/index")
 const db = require("./controllers/db/collection")
 const bithumb = require("./controllers/api/bithumb")
-const job = require("./controllers/job/schedule")
+const job = require("./controllers/job/job")
 
 app.use("/", index)
 app.use("/db/collection", db)
