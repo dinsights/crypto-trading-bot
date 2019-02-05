@@ -90,10 +90,11 @@ let createTransactionData = (currency, /*index,*/ transactionData) => {return ne
 let start = async (currency) => {
     let index = await getIndexData(currency)
     let transactionData = await getTransactionData(currency, index)
-    transactionData.sort((a,b) => {return a.cont_no - b.cont_no}).forEach(value => {
-        createTransactionData(currency, value)
+    transactionData.sort((a, b) => {return a.cont_no - b.cont_no}).forEach((value, index) => {
+        setTimeout(() => {
+            createTransactionData(currency, value)
+        }, 15*(index+1))
     })
-    //console.log(transactionData)
 }
 
 exports.getIndexData = getIndexData
