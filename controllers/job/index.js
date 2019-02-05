@@ -16,7 +16,7 @@ let jobList = {
 router.get("/scrapData", (req, res, next) => {
     setInterval(() => {
         jobList.scrapData("btc")
-    }, 2000)
+    }, 20000)
     res.send({"message": "data scrapping is started..."})
 })
 

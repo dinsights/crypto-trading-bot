@@ -93,7 +93,7 @@ let start = async (currency) => {
     transactionData.sort((a, b) => {return a.cont_no - b.cont_no}).forEach((value, index) => {
         setTimeout(() => {
             createTransactionData(currency, value)
-        }, 15*(index+1))
+        }, 200*(index+1))
     })
 }
 
