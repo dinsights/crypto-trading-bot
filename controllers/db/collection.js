@@ -6,7 +6,6 @@
 // PACKAGES
 const express = require("express")
 const router = express.Router()
-const http = require("../../utils/http")
 const util = require("../../utils/util")
 const mongodb = require("mongodb")
 const dotenv = require("dotenv").config()
@@ -44,7 +43,6 @@ router.post("/:collection", async (req, res, next) => {
             connection.close()
         }
     })
-    
 })
 
 //// Read by query => GET /db/collection/:collection

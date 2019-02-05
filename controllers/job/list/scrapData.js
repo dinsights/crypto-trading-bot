@@ -1,5 +1,5 @@
 const request = require("request")
-const dotenv = require("dotenv").config()
+const dotenv = require("dotenv"); dotenv.config()
 
 // Variables
 const localhost = process.env.LOCALHOST
@@ -41,8 +41,8 @@ let getIndexData = (currency) => {return new Promise(
 let getTransactionData = (currency, index) => {return new Promise(
     (resolve) => {
         let qs = {
-            "cont_no": index + 2,
-            "count": 1
+            "cont_no": index + 101,
+            "count": 100
         }
         request.get(
             localhost + "/api/bithumb/transaction_history/" + currency,
@@ -58,9 +58,9 @@ let getTransactionData = (currency, index) => {return new Promise(
     })
 }
 
-let createTransactionData = (currency, index, transactionData) => {return new Promise(
+let createTransactionData = (currency, /*index,*/ transactionData) => {return new Promise(
     (resolve, reject) => {
-        let data = transactionData[0]
+        let data = transactionData
         let uri = localhost + "/db/collection/history-" + currency
         let doc = {
             _id: data.cont_no,
@@ -75,12 +75,12 @@ let createTransactionData = (currency, index, transactionData) => {return new Pr
                 console.error(error)
             } else {
                 if(response.body.ok==1) {
-                    resolve(response.body)
+                    resolve(response.body.ok)
                 } else if (response.body.code==11000) {
-                    index = index+1
+                    /*index = index+1
                     transactionData = await getTransactionData(currency, index)
-                    createTransactionData(currency, index, transactionData)
-                    resolve(response)
+                    createTransactionData(currency, index, transactionData)*/
+                    resolve(response.body.code)
                 }
             }
         })
@@ -90,7 +90,10 @@ let createTransactionData = (currency, index, transactionData) => {return new Pr
 let start = async (currency) => {
     let index = await getIndexData(currency)
     let transactionData = await getTransactionData(currency, index)
-    createTransactionData(currency, index, transactionData)
+    transactionData.sort((a,b) => {return a.cont_no - b.cont_no}).forEach(value => {
+        createTransactionData(currency, value)
+    })
+    //console.log(transactionData)
 }
 
 exports.getIndexData = getIndexData

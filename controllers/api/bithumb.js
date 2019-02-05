@@ -1,7 +1,6 @@
 // Packages
 const express = require("express")
 const router = express.Router()
-const http = require("../../utils/http")
 const util = require("../../utils/util")
 const request = require("request")
 
